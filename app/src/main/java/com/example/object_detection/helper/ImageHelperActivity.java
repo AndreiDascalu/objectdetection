@@ -24,13 +24,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.object_detection.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.mlkit.vision.common.InputImage;
-import com.google.mlkit.vision.label.ImageLabel;
-import com.google.mlkit.vision.label.ImageLabeler;
-import com.google.mlkit.vision.label.ImageLabeling;
-import com.google.mlkit.vision.label.defaults.ImageLabelerOptions;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,10 +34,9 @@ import java.util.List;
 public class ImageHelperActivity extends AppCompatActivity {
     private ImageView inputImageView;
     private TextView outputTextView;
-
     private File photoFile;
 
-    private ImageLabeler imageLabeler;
+
     private final int REQUEST_PICK_IMAGE = 1000;
     private final int REQUEST_CAPTURE_IMAGE = 1001;
 
@@ -55,8 +47,6 @@ public class ImageHelperActivity extends AppCompatActivity {
 
         inputImageView = findViewById(R.id.imageViewInput);
         outputTextView = findViewById(R.id.textViewOutput);
-
-        imageLabeler = ImageLabeling.getClient(new ImageLabelerOptions.Builder().setConfidenceThreshold(0.7f).build());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
@@ -135,30 +125,16 @@ public class ImageHelperActivity extends AppCompatActivity {
         return bitmap;
     }
 
-    private void runClassification(Bitmap bitmap) {
-        InputImage inputImage = InputImage.fromBitmap(bitmap, 0);
-        imageLabeler.process(inputImage).addOnSuccessListener(new OnSuccessListener<List<ImageLabel>>() {
-            @Override
-            public void onSuccess(List<ImageLabel> imageLabels) {
-                if (imageLabels.size() > 0) {
-                    StringBuilder builder = new StringBuilder();
-                    for (ImageLabel label : imageLabels) {
-                        builder.append(label.getText())
-                                .append(" : ")
-                                .append(label.getConfidence())
-                                .append("\n");
-                    }
-                    outputTextView.setText(builder.toString());
-                } else {
-                    outputTextView.setText("Could not classify any objects");
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                e.printStackTrace();
-            }
-        });
+    protected void runClassification(Bitmap bitmap) {
+        
+    }
+
+    protected TextView getOutputTextView(){
+        return outputTextView;
+    }
+
+    protected ImageView getInputImageView(){
+        return inputImageView;
     }
 
     @Override
