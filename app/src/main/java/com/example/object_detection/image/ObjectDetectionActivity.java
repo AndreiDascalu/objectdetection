@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.object_detection.helper.BoxWithLabel;
 import com.example.object_detection.helper.ImageHelperActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -15,6 +16,7 @@ import com.google.mlkit.vision.objects.ObjectDetection;
 import com.google.mlkit.vision.objects.ObjectDetector;
 import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ObjectDetectionActivity extends ImageHelperActivity {
@@ -42,15 +44,21 @@ public class ObjectDetectionActivity extends ImageHelperActivity {
                     public void onSuccess(List<DetectedObject> detectedObjects) {
                         if(!detectedObjects.isEmpty()){
                             StringBuilder builder = new StringBuilder();
+                            List<BoxWithLabel> boxes = new ArrayList<>();
+
                             for(DetectedObject object: detectedObjects){
                                 if(!object.getLabels().isEmpty()){
                                     String label = object.getLabels().get(0).getText();
-                                    builder.append(label).append("\n");
+                                    builder.append(label).append(": ").append(object.getLabels().get(0).getConfidence()).append("\n");
+                                    boxes.add(new BoxWithLabel(object.getBoundingBox(),label));
                                     Log.d("Object Detection","Object detected" + label);
 
+                                }else{
+                                    builder.append("Unknown").append("\n");
                                 }
                             }
                             getOutputTextView().setText(builder.toString());
+                            drawDetectionResult(boxes,bitmap);
                         }else{
                             getOutputTextView().setText("Could not detect");
                         }
