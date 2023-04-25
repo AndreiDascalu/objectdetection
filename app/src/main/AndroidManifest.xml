@@ -25,6 +25,9 @@
             android:name=".image.FlowerIdentificationActivity"
             android:exported="true" />
         <activity
+            android:name=".image.ObjectDetectionActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

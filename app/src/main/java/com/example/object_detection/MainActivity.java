@@ -19,6 +19,7 @@ import android.widget.Button;
 import com.example.object_detection.helper.ImageHelperActivity;
 import com.example.object_detection.image.FlowerIdentificationActivity;
 import com.example.object_detection.image.ImageClassificationActivity;
+import com.example.object_detection.image.ObjectDetectionActivity;
 
 public class MainActivity extends AppCompatActivity {
 Button takePermission;
@@ -48,6 +49,11 @@ Button takePermission;
 
     public void onGoToFlowerActivity(View view){
         Intent intent = new Intent(this, FlowerIdentificationActivity.class);
+        startActivity(intent);
+    }
+
+    public void onGoToObjectDetection(View view){
+        Intent intent = new Intent(this, ObjectDetectionActivity.class);
         startActivity(intent);
     }
 }
